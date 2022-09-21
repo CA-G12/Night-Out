@@ -7,7 +7,7 @@ const checkResponse = response => {
 };
 
 export const getData = () => {
-    return fetch(`https://yts.mx/api/v2/list_movies.json`)
+    return fetch(`https://api.tvmaze.com/shows`)
         .then(checkResponse)
         .catch(err => {
             throw new Error(`fetch getData failed ${err}`);

@@ -6,7 +6,8 @@ function App() {
   return (
     <div>
       <Navbar />
-      <MoviesBox /></div>
+      <MoviesBox />
+      </div>
   );
 }
 

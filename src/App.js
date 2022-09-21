@@ -1,9 +1,13 @@
 import './App.css';
 import Navbar from './Components/Header';
+import MoviesBox from './Components/MoviesBox';
 
 function App() {
   return (
-    <Navbar/>
+    <div>
+      <Navbar />
+      <MoviesBox />
+      </div>
   );
 }
 

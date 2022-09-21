@@ -1,4 +1,6 @@
 import React from "react";
+import '../MovieBox.css';
+
 import { getData } from "../getData";
 class MoviesBox extends React.Component {
     constructor() {
@@ -31,16 +33,22 @@ class MoviesBox extends React.Component {
     }
     render() {
         return (
-            <div>
-                <div>
-                    <input type='search' onChange={(e) => this.setState({ Q: e.target.value })} />
+            <div className='container'>
+                <div className='search'>
+                    {/* <h1>Home</h1> */}
+                    <input placeholder="Search" type='search' onChange={(e) => this.setState({ Q: e.target.value })} />
                 </div>
-                {this.state.movie.slice(0, 50).map((e) => {
-                    return <div key={e.id}>
-                        <h1>{e.name}</h1>
-                        <img src={e.image.medium} alt={e.title} />
-                    </div>
+                <div className='cardsContainer'>
+
+                {this.state.movie.slice(0, 80).map((e) => {
+                    return (
+                        <div className='card' key={e.id}>
+                            <h1>{e.name}</h1>
+                            <img src={e.image.medium} alt={e.title} />
+                        </div>
+                    )
                 })}
+            </div>
             </div>
 
         )

@@ -4,22 +4,41 @@ class MoviesBox extends React.Component {
     constructor() {
         super();
         this.state = {
-            movie: []
+            movie: [],
+            Q: ""
         };
+
     }
     componentDidMount() {
-        getData().then((data) => {
-            console.log(data);
-            return this.setState({ movie: data })
-        });
+        getData().then((data) => this.setState({ movie: data }));
+    }
+    componentDidUpdate(prevProps, prevState) {
+        const { Q } = this.state;
+        if (Q === '') {
+            getData().then((data) => this.setState({ movie: data }));
+        }
+        else if (prevState.Q !== Q) {
+            this.searchFun()
+        }
+    }
+
+    searchFun = () => {
+        const { movie, Q } = this.state;
+        const movies = movie.filter(e =>
+            e.name.toLowerCase().includes(Q.toLowerCase())
+        )
+        return this.setState({ movie: movies });
     }
     render() {
         return (
             <div>
+                <div>
+                    <input type='search' onChange={(e) => this.setState({ Q: e.target.value })} />
+                </div>
                 {this.state.movie.slice(0, 50).map((e) => {
                     return <div key={e.id}>
                         <h1>{e.name}</h1>
-                        <img src={e.image.medium || 'https://media.istockphoto.com/vectors/error-404-page-not-found-vector-id673101428?k=20&m=673101428&s=170667a&w=0&h=sifFCXQls5ygak3Y-II0cI1tibgQZVyPWzpLHtHKOGg='} alt={e.title} />
+                        <img src={e.image.medium} alt={e.title} />
                     </div>
                 })}
             </div>

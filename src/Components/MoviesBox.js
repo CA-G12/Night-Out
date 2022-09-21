@@ -40,15 +40,19 @@ class MoviesBox extends React.Component {
                 </div>
                 <div className='cardsContainer'>
 
-                {this.state.movie.slice(0, 80).map((e) => {
-                    return (
-                        <div className='card' key={e.id}>
-                            <h1>{e.name}</h1>
-                            <img src={e.image.medium} alt={e.title} />
-                        </div>
-                    )
-                })}
-            </div>
+                    {this.state.movie.slice(0, 80).map((e) => {
+                        return (
+                            <div className='card' key={e.id}>
+                                <h1>{e.name}</h1>
+                                <img src={e.image.medium} alt={e.title} />
+                                <div className='details'>
+                                    <h2>Genres: {e.genres[0]}</h2>
+                                    <h2>Rating: {e.rating.average} ⭐</h2>
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
             </div>
 
         )

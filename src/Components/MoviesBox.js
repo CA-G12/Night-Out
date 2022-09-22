@@ -8,6 +8,7 @@ class MoviesBox extends React.Component {
         super()
         this.state = {
             movies: [],
+            dataMovies: [],
             loading: true,
             error: false,
             q: '',
@@ -17,7 +18,7 @@ class MoviesBox extends React.Component {
 
     componentDidMount() {
         getData()
-            .then(data => this.setState({ loading: false, movies: data }))
+            .then(data => this.setState({ loading: false, movies: [...data], dataMovies: [...data] }))
             .catch(() => this.setState({ loading: false, error: true }))
     }
     filterData = data => {
@@ -26,7 +27,6 @@ class MoviesBox extends React.Component {
         if (q === '') {
             return data
         }
-
         const movies = data.filter(e =>
             e.name.toLowerCase().includes(q.toLowerCase())
         )
@@ -35,7 +35,7 @@ class MoviesBox extends React.Component {
     }
 
     render() {
-        const filteredList = this.filterData(this.state.movies)
+        const filteredList = this.filterData(this.state.dataMovies)
         return this.state.loading ? (
             <div
                 style={{
@@ -57,7 +57,7 @@ class MoviesBox extends React.Component {
                         <input
                             placeholder='Search'
                             type='search'
-                            onChange={e => this.setState({ q: e.target.value })}
+                            onChange={e => this.setState({ q: e.target.value, page: { start: 0, end: 16 } })}
                         />
                     </div>
                 </div>
@@ -78,7 +78,7 @@ class MoviesBox extends React.Component {
                         })}
                 </div>
                 <div className='pagination'>
-                    {new Array(Math.floor(filteredList.length / 16))
+                    {new Array(Math.ceil(filteredList.length / 16))
                         .fill(0)
                         .map((e, i) => (
                             <button

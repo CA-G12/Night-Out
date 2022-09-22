@@ -44,11 +44,13 @@ class MoviesBox extends React.Component {
     render() {
         return (
             <div className='container'>
-                <div className='search'>
-                    <input placeholder="Search" type='search' onChange={(e) => this.setState({ Q: e.target.value })} />
+                <div className='header'>
+                    <h1 className="welcome">Hello There</h1>
+                    <div className='search'>
+                        <input placeholder="Search" type='search' onChange={(e) => this.setState({ Q: e.target.value })} />
+                    </div>
                 </div>
                 <div className='cardsContainer'>
-
                     {this.state.movie.slice(this.state.page.start, this.state.page.end).map((e) => {
                         return (
                             <div className='card' key={e.id}>

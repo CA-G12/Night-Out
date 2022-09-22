@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 html {
   font-size: 10px;
 }
@@ -56,8 +57,11 @@ body {
   margin: 2.5rem 0;
   align-items: center;
 }
-
+::selection{
+  background-color: #094c66;
+}
 .search input {
+  caret-color: #61dafb;
   border-radius: 2rem;
   width: 40rem;
   height: 5rem;
@@ -67,10 +71,6 @@ body {
 .search input::placeholder {
   color: gray;
 }
-
-/* .search  h1{
-    color: #61dafb;
-} */
 .pagination {
   margin: 5rem 10rem;
   display: flex;
@@ -79,11 +79,35 @@ body {
 
 .pagination button {
   background-color: #61dafb;
+  box-shadow: #094c66 4px 4px 0px;
   padding: 8px 16px;
+  transition: transform 200ms , box-shadow 200ms;
+}
+.pagination button:active{
+  transform: translateY(4pxpx) translateX(4px);
+  box-shadow: #094c66 0px 0px 0px;
 }
 
-.pagination button:hover {
-  background-color: gray;
-  /* color: white; */
+.welcome {
+font-family: 'Pacifico';
+color: white;
+animation: neon 7s infinite;
+font-size: 8rem;
+margin-bottom: 0;
+
+}
+@keyframes neon {
+  0% , 39% ,41% , 59% ,61%,100% {
+    text-shadow: white 0 0 12px, #61dafb 0 0 24px , #61dafb 0 0 36px;
+  }
+  40%, 60% {
+    text-shadow :none
+  }
+}
+.header{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 

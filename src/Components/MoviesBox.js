@@ -1,84 +1,102 @@
-import React from "react";
-import '../MovieBox.css';
+import React from 'react'
+import CircleLoader from 'react-spinners/CircleLoader'
+import '../MovieBox.css'
 
-import { getData } from "../getData";
+import { getData } from '../getData'
 class MoviesBox extends React.Component {
     constructor() {
-        super();
+        super()
         this.state = {
-            movie: [],
-            Q: "",
-            moviesData: [],
-
+            movies: [],
+            loading: true,
+            error: false,
+            q: '',
             page: { start: 0, end: 16 }
-
-        };
-
+        }
     }
+
     componentDidMount() {
-        getData().then((data) => this.setState({ movie: [...data], moviesData: [...data] }));
+        getData()
+            .then(data => this.setState({ loading: false, movies: data }))
+            .catch(() => this.setState({ loading: false, error: true }))
     }
-    componentDidUpdate(prevProps, prevState) {
-        const { Q } = this.state;
-        if (Q === '') {
-            getData().then((data) => this.setState({ movie: data }));
+    filterData = data => {
+        const { q } = this.state
+
+        if (q === '') {
+            return data
         }
-        else if (prevState.Q !== Q) {
-            this.filterData()
-        }
-    }
-    setPagenationNext = () => {
-        return this.setState({ page: { start: this.state.page.start + 16, end: this.state.page.end + 16 } })
-    }
-    setPagenationPrev = () => {
-        return this.setState({ page: { start: this.state.page.start - 16, end: this.state.page.end - 16 } })
+
+        const movies = data.filter(e =>
+            e.name.toLowerCase().includes(q.toLowerCase())
+        )
+
+        return movies
     }
 
-    filterData = () => {
-        const { Q, moviesData } = this.state;
-        const movies = moviesData.filter(e =>
-            e.name.toLowerCase().includes(Q.toLowerCase())
-        )
-        return this.setState({ movie: movies, page: { start: 0, end: 16 } });
-    }
     render() {
-        return (
+        const filteredList = this.filterData(this.state.movies)
+        return this.state.loading ? (
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh'
+                }}
+            >
+                <CircleLoader size={200} color='#36d7b7' />{' '}
+            </div>
+        ) : this.state.error ? (
+            <div>Something went wrong</div>
+        ) : (
             <div className='container'>
                 <div className='header'>
-                    <h1 className="welcome">Hello There</h1>
+                    <h1 className='welcome'>Hello There</h1>
                     <div className='search'>
-                        <input placeholder="Search" type='search' onChange={(e) => this.setState({ Q: e.target.value })} />
+                        <input
+                            placeholder='Search'
+                            type='search'
+                            onChange={e => this.setState({ q: e.target.value })}
+                        />
                     </div>
                 </div>
                 <div className='cardsContainer'>
-                    {this.state.movie.slice(this.state.page.start, this.state.page.end).map((e) => {
-                        return (
-                            <div className='card' key={e.id}>
-                                <h1>{e.name}</h1>
-                                <img src={e.image.medium} alt={e.title} />
-                                <div className='details'>
-                                    <h2>Genres: {e.genres[0]}</h2>
-                                    <h2>Rating: {e.rating.average} ⭐</h2>
+                    {filteredList
+                        .slice(this.state.page.start, this.state.page.end)
+                        .map(e => {
+                            return (
+                                <div className='card' key={e.id}>
+                                    <h1>{e.name}</h1>
+                                    <img src={e.image.medium} alt={e.title} />
+                                    <div className='details'>
+                                        <h2>Genres: {e.genres[0]}</h2>
+                                        <h2>Rating: {e.rating.average} ⭐</h2>
+                                    </div>
                                 </div>
-                            </div>
-                        )
-                    })}
+                            )
+                        })}
                 </div>
-                <div className="pagination">
-                    {
-                        new Array(this.state.moviesData.length / 16).fill(0).map((e, i) => <button key={i} onClick={() => {
-                            console.log(this.state.page);
-                            this.setState({ page: { start: 16 * (i), end: 16 * (i + 1) } })
-                        }}>{i + 1}</button>)
-
-                    }
-                    {/* <button onClick={this.setPagenationPrev} disabled={this.state.page.start === 0 ? true : false} >{"<"}</button>
-                    <button onClick={this.setPagenationNext} disabled={this.state.page.end > this.state.moviesData.length - 1 ? true : false}>{'>'}</button> */}
+                <div className='pagination'>
+                    {new Array(Math.floor(filteredList.length / 16))
+                        .fill(0)
+                        .map((e, i) => (
+                            <button
+                                key={i}
+                                onClick={() => {
+                                    console.log(this.state.page)
+                                    this.setState({
+                                        page: { start: 16 * i, end: 16 * (i + 1) }
+                                    })
+                                }}
+                            >
+                                {i + 1}
+                            </button>
+                        ))}
                 </div>
             </div>
-
         )
     }
 }
 
-export default MoviesBox;
+export default MoviesBox
